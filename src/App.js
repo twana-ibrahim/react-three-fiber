@@ -1,47 +1,10 @@
 import "./App.scss";
-import { useRef, useState } from "react";
-import { Canvas, useFrame } from "react-three-fiber";
+import { Canvas } from "react-three-fiber";
+import { softShadows, OrbitControls } from "@react-three/drei";
 
-import {
-  softShadows,
-  MeshWobbleMaterial,
-  OrbitControls,
-} from "@react-three/drei";
-import { useSpring, a } from "@react-spring/three";
+import Box from "./Box";
 
 softShadows();
-
-const MeshBox = ({ position, args, color, speed, factor }) => {
-  const meshRef = useRef(null);
-
-  useFrame(
-    () => (meshRef.current.rotation.x = meshRef.current.rotation.y += 0.01)
-  );
-
-  const [expand, setExpand] = useState(false);
-
-  const props = useSpring({
-    scale: expand ? [1.4, 1.4, 1.4] : [1, 1, 1],
-  });
-
-  return (
-    <a.mesh
-      onClick={() => setExpand(!expand)}
-      scale={props.scale}
-      castShadow
-      position={position}
-      ref={meshRef}
-    >
-      <boxBufferGeometry attach="geometry" args={args} />
-      <MeshWobbleMaterial
-        attach="material"
-        color={color}
-        speed={speed}
-        factor={factor}
-      />
-    </a.mesh>
-  );
-};
 
 function App() {
   return (
@@ -74,25 +37,15 @@ function App() {
             <shadowMaterial attach="material" opacity={0.3} />
           </mesh>
 
-          <MeshBox
+          <Box
             position={[0, 1, 0]}
             args={[3, 2, 1]}
             color="lightblue"
-            speed={2}
+            speed={1.5}
             factor={1}
           />
-          <MeshBox
-            position={[-2, 1, -5]}
-            color="pink"
-            speed={1.7}
-            factor={0.75}
-          />
-          <MeshBox
-            position={[5, 1, -2]}
-            color="pink"
-            speed={2.5}
-            factor={1.5}
-          />
+          <Box position={[-2, 1, -5]} color="pink" speed={1.7} factor={0.75} />
+          <Box position={[5, 1, -2]} color="pink" speed={2.5} factor={1.5} />
         </group>
 
         {/* controlling by mouse */}
